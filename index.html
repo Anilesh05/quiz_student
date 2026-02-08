@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZBYTES | CYBERCREST'26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyber-black: #000000;
+            --cyber-green: #39FF14;
+            --cyber-green-glow: rgba(57, 255, 20, 0.3);
+            --cyber-green-dim: rgba(57, 255, 20, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--cyber-black);
+            color: var(--cyber-green);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Circuit Background */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        .site-logo {
+            width: 170px;          /* adjust size if needed */
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(57, 255, 20, 0.8));
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            overflow: hidden;
+        }
+        
+        .circuit-line {
+            position: absolute;
+            background: var(--cyber-green);
+            animation: pulse 3s infinite;
+        }
+        
+        .circuit-line.horizontal {
+            height: 1px;
+            width: 100%;
+        }
+        
+        .circuit-line.vertical {
+            width: 1px;
+            height: 100%;
+        }
+        
+        .circuit-node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--cyber-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cyber-green);
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% {
+                text-shadow: 0 0 10px var(--cyber-green),
+                             0 0 20px var(--cyber-green),
+                             0 0 30px var(--cyber-green);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--cyber-green),
+                             0 0 30px var(--cyber-green),
+                             0 0 40px var(--cyber-green),
+                             0 0 50px var(--cyber-green);
+            }
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(transparent, var(--cyber-green), transparent);
+            opacity: 0.3;
+            animation: scanline 4s linear infinite;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out, neonPulse 3s infinite;
+            border: 2px solid var(--cyber-green);
+            padding: 15px 30px;
+            background: rgba(57, 255, 20, 0.05);
+        }
+        
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 15px;
+            margin: 30px 0;
+            animation: fadeInUp 1s ease-out 0.2s both;
+            position: relative;
+        }
+        
+        .hero-title::before,
+        .hero-title::after {
+            content: 'QUIZBYTES';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-title::before {
+            color: #ff00ff;
+            z-index: -1;
+            animation: glitch 0.3s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+        
+        .hero-title::after {
+            color: #00ffff;
+            z-index: -2;
+            animation: glitch 0.3s infinite reverse;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .cta-button {
+            background: var(--cyber-green);
+            color: var(--cyber-black);
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 18px 50px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            box-shadow: 0 0 20px var(--cyber-green-glow);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px var(--cyber-green);
+        }
+        
+        /* Countdown Timer */
+        .countdown {
+            display: flex;
+            gap: 30px;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease-out 0.8s both;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            border: 2px solid var(--cyber-green);
+            padding: 20px 30px;
+            background: var(--cyber-green-dim);
+            position: relative;
+        }
+        
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid var(--cyber-green);
+            animation: pulse 2s infinite;
+        }
+        
+        .countdown-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            text-shadow: 0 0 10px var(--cyber-green);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+        
+        /* Section Headers */
+        .section {
+            padding: 80px 20px;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: 8px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--cyber-green);
+            box-shadow: 0 0 10px var(--cyber-green);
+        }
+        
+        /* Domains Grid */
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            justify-items: center;
+        }
+
+        .domain-card:last-child {
+            grid-column: 1 / -1;
+            max-width: 350px;
+            justify-self: center;
+        }
+
+        
+        .domain-card {
+            border: 2px solid var(--cyber-green);
+            padding: 40px 30px;
+            background: var(--cyber-green-dim);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .domain-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 0;
+            height: 2px;
+            background: var(--cyber-green);
+            transition: width 0.3s;
+        }
+        
+        .domain-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 2px;
+            height: 0;
+            background: var(--cyber-green);
+            transition: height 0.3s 0.3s;
+        }
+        
+        .domain-card:hover::before {
+            width: 100%;
+        }
+        
+        .domain-card:hover::after {
+            height: 100%;
+        }
+        
+        .domain-card:hover {
+            transform: translateY(-10px);
+            background: rgba(57, 255, 20, 0.15);
+            box-shadow: 0 10px 40px var(--cyber-green-glow);
+        }
+        
+        .domain-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            text-shadow: 0 0 20px var(--cyber-green);
+        }
+        
+        .domain-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+        
+        .domain-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--cyber-green);
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--cyber-green);
+        }
+        
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 30px 40px;
+            margin-bottom: 50px;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 60px;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 60px;
+        }
+        
+        .timeline-content {
+            border: 2px solid var(--cyber-green);
+            padding: 30px;
+            background: var(--cyber-green-dim);
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid var(--cyber-green);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 30px;
+            width: 0;
+            height: 0;
+            border-right: 10px solid var(--cyber-green);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: var(--cyber-green);
+            border-radius: 50%;
+            border: 4px solid var(--cyber-black);
+            box-shadow: 0 0 20px var(--cyber-green);
+            z-index: 2;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-marker {
+            right: -60px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-marker {
+            left: -10px;
+        }
+        
+        .timeline-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+        
+        .timeline-details {
+            opacity: 0.9;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+        
+        .timeline-details li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .timeline-details li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--cyber-green);
+        }
+        
+        /* Eligibility Box */
+        .eligibility-box {
+            max-width: 800px;
+            margin: 60px auto;
+            border: 3px solid var(--cyber-green);
+            padding: 40px;
+            background: var(--cyber-green-dim);
+            position: relative;
+        }
+        
+        .eligibility-box::before,
+        .eligibility-box::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--cyber-green);
+        }
+        
+        .eligibility-box::before {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .eligibility-box::after {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        .eligibility-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+        
+        .eligibility-item {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 3px solid var(--cyber-green);
+            background: rgba(57, 255, 20, 0.05);
+            line-height: 1.6;
+        }
+        
+        .eligibility-item strong {
+            color: var(--cyber-green);
+            text-shadow: 0 0 5px var(--cyber-green);
+        }
+        
+        /* Leaderboard */
+        .leaderboard {
+            max-width: 900px;
+            margin: 60px auto;
+            border: 2px solid var(--cyber-green);
+            padding: 40px;
+            background: var(--cyber-green-dim);
+            text-align: center;
+        }
+        
+        .leaderboard-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+            animation: neonPulse 2s infinite;
+        }
+        
+        .leaderboard-status {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+        
+        /* Footer */
+        .footer {
+            border-top: 2px solid var(--cyber-green);
+            padding: 50px 20px;
+            text-align: center;
+            background: rgba(57, 255, 20, 0.02);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            line-height: 1.8;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        
+        .footer-copyright {
+            margin-top: 30px;
+            opacity: 0.5;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 4px;
+                padding: 10px 20px;
+            }
+            
+            .hero-title {
+                letter-spacing: 5px;
+            }
+            
+            .hero-subtitle {
+                letter-spacing: 3px;
+            }
+            
+            .countdown {
+                gap: 15px;
+            }
+            
+            .countdown-item {
+                padding: 15px 20px;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 60px !important;
+                padding-right: 20px !important;
+            }
+            
+            .timeline-marker {
+                left: 11px !important;
+            }
+            
+            .timeline-content::before {
+                left: -12px !important;
+                border-right: 10px solid var(--cyber-green) !important;
+                border-left: none !important;
+            }
+            
+            .section-title {
+                letter-spacing: 3px;
+            }
+            
+            .domains-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .eligibility-box {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scanline Effect -->
+    <div class="scanline"></div>
+    
+    <!-- Circuit Background -->
+    <div class="circuit-bg" id="circuitBg"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        
+        <div class="container">
+            <!-- LOGO -->
+            <div class="logo-container">
+                <img src="Logo.png" alt="CyberCrest Logo" class="site-logo">
+            </div>            
+            <div class="logo">CYBERCREST'26</div>
+            <div class="glitch-wrapper">
+                <h1 class="hero-title">QUIZBYTES</h1>
+            </div>
+            <p class="hero-subtitle">National Level Technical Symposium</p>
+            <button class="cta-button" onclick="scrollToRegistration()">Register Now</a></button>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Domains Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">DOMAINS</h2>
+            <div class="domains-grid">
+                <div class="domain-card">
+                    <span class="domain-icon">☁</span>
+                    <h3 class="domain-title">Cloud Computing</h3>
+                    <p class="domain-desc">Master the architecture of distributed systems, virtualization, and cloud-native technologies that power the modern digital infrastructure.</p>
+                </div>
+                <div class="domain-card">
+                    <span class="domain-icon">🤖</span>
+                    <h3 class="domain-title">Artificial Intelligence</h3>
+                    <p class="domain-desc">Explore machine learning algorithms, neural networks, and cognitive computing that drive intelligent automation and decision-making.</p>
+                </div>
+                <div class="domain-card">
+                    <span class="domain-icon">📊</span>
+                    <h3 class="domain-title">Data Science</h3>
+                    <p class="domain-desc">Harness the power of big data analytics, statistical modeling, and predictive algorithms to extract meaningful insights from complex datasets.</p>
+                </div>
+                <div class="domain-card">
+                    <span class="domain-icon">🔒</span>
+                    <h3 class="domain-title">Cyber Security</h3>
+                    <p class="domain-desc">Defend against evolving threats through cryptography, penetration testing, and advanced security protocols in the digital battleground.</p>
+                </div>
+                <div class="domain-card">
+                    <span class="domain-icon">💻</span>
+                    <h3 class="domain-title">Software Development</h3>
+                    <p class="domain-desc">Design, build, and deploy robust software solutions using modern programming languages, development frameworks, version control systems, and agile methodologies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<!-- Rules / Roadmap Section -->
+<section class="section roadmap-section">
+    <div class="container">
+        <h2 class="section-title">THE ROADMAP</h2>
+
+        <div class="timeline">
+
+            <!-- ROUND 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Round 1: The Firewall (Screening)</h3>
+                    <ul class="timeline-details">
+                        <li><strong>Duration:</strong> 30 Minutes</li>
+                        <li><strong>Venue:</strong> Computer Lab 5</li>
+                        <li><strong>Format:</strong> Online Quiz (Google Forms / Quiz Platform)</li>
+                        <li><strong>Tie-Breaker:</strong> Fastest submission time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ROUND 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Round 2: The Decryption (Semi-Finals)</h3>
+                    <ul class="timeline-details">
+                        <li><strong>Venue:</strong> Lab 5</li>
+                        <li><strong>Format:</strong> Visual & Speed Rounds</li>
+                        <li>Pixel Perfect - Guess tech logos from distorted images</li>
+                        <li>Identity Crisis - "Who Am I?" tech personality clues</li>
+                        <li>Velocity - 60-second rapid fire per team</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ROUND 3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Round 3: System Override (Grand Finale)</h3>
+                    <ul class="timeline-details">
+                        <li><strong>Venue:</strong> Main Stage</li>
+                        <li>The Handshake - Warm-up round (<strong>Lowest score eliminated</strong>)</li>
+                        <li>Network Links - Visual connection questions</li>
+                        <li>High Voltage - Buzzer round with <strong>negative marking</strong></li>
+                        <li>Pandora's Box - Random topic selection via chits</li>
+                        <li class="cyber-strike">
+                            <strong>Cyber Strike:</strong> Attack cards to sabotage rival teams
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+    
+    <!-- Team Eligibility Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">TEAM ELIGIBILITY</h2>
+            <div class="eligibility-box">
+                <h3 class="eligibility-title">REQUIREMENTS</h3>
+                <div class="eligibility-item">
+                    <strong>⚡ Team Size:</strong> Entries must be in teams of exactly <strong>TWO (2)</strong> members
+                </div>
+                <div class="eligibility-item">
+                    <strong>🚫 Device Policy:</strong> No electronic gadgets allowed during the competition (phones, tablets, smartwatches, etc.)
+                </div>
+                <div class="eligibility-item">
+                    <strong>🎓 Eligibility:</strong> Open to all undergraduate and postgraduate students from recognized institutions
+                </div>
+                <div class="eligibility-item">
+                    <strong>📝 Registration:</strong> Both team members must register with valid institutional ID proof
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Leaderboard Section -->
+    <section class="section">
+        <div class="container">
+            <div class="leaderboard">
+                <h2 class="leaderboard-title">LIVE LEADERBOARD</h2>
+                <p class="leaderboard-status">[ SYSTEM INITIALIZING... ]</p>
+                <p class="leaderboard-status" style="margin-top: 20px; font-size: 1rem;">Real-time rankings will be displayed during the event</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">Organized By</h3>
+            <p class="footer-text">Department of Computer Applications</p>
+            <p class="footer-text">B. S. Abdur Rahman Crescent Institute Of Science And Technology</p>
+            <p class="footer-text">Contact: anileshmoses05@gmail.com | 8695204165</p>
+            <p class="footer-copyright">© 2026 CYBERCREST. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Create animated circuit background
+        function createCircuitBackground() {
+            const circuitBg = document.getElementById('circuitBg');
+            
+            // Create horizontal lines
+            for (let i = 0; i < 15; i++) {
+                const line = document.createElement('div');
+                line.className = 'circuit-line horizontal';
+                line.style.top = `${Math.random() * 100}%`;
+                line.style.animationDelay = `${Math.random() * 3}s`;
+                circuitBg.appendChild(line);
+            }
+            
+            // Create vertical lines
+            for (let i = 0; i < 15; i++) {
+                const line = document.createElement('div');
+                line.className = 'circuit-line vertical';
+                line.style.left = `${Math.random() * 100}%`;
+                line.style.animationDelay = `${Math.random() * 3}s`;
+                circuitBg.appendChild(line);
+            }
+            
+            // Create nodes at intersections
+            for (let i = 0; i < 30; i++) {
+                const node = document.createElement('div');
+                node.className = 'circuit-node';
+                node.style.left = `${Math.random() * 100}%`;
+                node.style.top = `${Math.random() * 100}%`;
+                node.style.animationDelay = `${Math.random() * 2}s`;
+                circuitBg.appendChild(node);
+            }
+        }
+        
+        // Countdown Timer
+        function updateCountdown() {
+            // Set event date (modify this to your actual event date)
+            const eventDate = new Date('2026-02-11T09:00:00').getTime();
+            
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = '<p style="font-size: 2rem; font-family: Orbitron;">EVENT LIVE NOW!</p>';
+            }
+        }
+        
+        // Scroll to registration (you can modify this to scroll to your registration form)
+        function scrollToRegistration() {
+            window.location.href = "Registration.html" ;
+            // For demo purposes, this shows an alert
+            // Replace with actual registration logic or scroll to registration section
+        }
+        
+        // Initialize
+        createCircuitBackground();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+        
+        // Observe domain cards
+        document.querySelectorAll('.domain-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            setTimeout(() => {
+                observer.observe(card);
+            }, index * 100);
+        });
+        
+        // Observe timeline items
+        document.querySelectorAll('.timeline-item').forEach((item, index) => {
+            item.style.opacity = '0';
+            setTimeout(() => {
+                observer.observe(item);
+            }, index * 150);
+        });
+    </script>
+</body>
+</html>
